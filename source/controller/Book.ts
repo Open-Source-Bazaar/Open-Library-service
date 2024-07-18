@@ -10,12 +10,12 @@ import {
 } from 'routing-controllers';
 import { ResponseSchema } from 'routing-controllers-openapi';
 
-import { BaseFilter, dataSource } from '../model';
-import { Book, BooklistChunk } from '../model/Book';
+import { BaseFilter, Book, BookMap, BooklistChunk, dataSource } from '../model';
 
 @JsonController('/book')
 export class BookController {
     store = dataSource.getRepository(Book);
+    mapStore = dataSource.getRepository(BookMap);
 
     @Post()
     @ResponseSchema(Book)
@@ -28,6 +28,16 @@ export class BookController {
     @OnNull(404)
     getOne(@Param('id') id: number) {
         return this.store.findOne({ where: { id } });
+    }
+
+    @Get('/:id/map')
+    @ResponseSchema(BookMap)
+    getOneMap(@Param('id') id: number) {
+        return this.mapStore
+            .createQueryBuilder()
+            .select('bookId, userId, count')
+            .where('bookId = :id', { id })
+            .getMany();
     }
 
     @Patch('/:id')
