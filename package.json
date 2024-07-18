@@ -1,16 +1,16 @@
 {
-    "name": "@idea2app/rest-node-ts",
+    "name": "@Open-Source-Bazaar/Open-Library-service",
     "version": "0.7.0",
     "license": "LGPL-3.0",
     "author": "shiy2008@gmail.com",
     "description": "RESTful API service scaffold based on Node.js & TypeScript",
-    "homepage": "https://github.com/idea2app/REST-Node-ts#readme",
+    "homepage": "https://github.com/Open-Source-Bazaar/Open-Library-service#readme",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/idea2app/REST-Node-ts.git"
+        "url": "git+https://github.com/Open-Source-Bazaar/Open-Library-service.git"
     },
     "bugs": {
-        "url": "https://github.com/idea2app/REST-Node-ts/issues"
+        "url": "https://github.com/Open-Source-Bazaar/Open-Library-service/issues"
     },
     "source": "source/index.ts",
     "main": "dist/index.js",
@@ -79,7 +79,7 @@
         "migration:run": "npm run typeorm -- migration:run",
         "upgrade:dev": "npm run migration:generate -- migration/version  &&  npm run migration:run",
         "upgrade:pro": "cross-env NODE_ENV=production  npm run migration:generate -- .data/version  &&  npm run migration:run",
-        "pack-image": "docker build -t idea2app/rest-node-ts:latest .",
-        "container": "docker rm -f rest-node-ts  &&  docker run --name rest-node-ts -p 8080:8080 -d idea2app/rest-node-ts:latest"
+        "pack-image": "docker build -t Open-Source-Bazaar/Open-Library-service:latest .",
+        "container": "docker rm -f Open-Library-service  &&  docker run --name Open-Library-service -p 8080:8080 -d Open-Source-Bazaar/Open-Library-service:latest"
     }
 }

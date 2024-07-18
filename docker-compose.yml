@@ -15,10 +15,10 @@ services:
         networks:
             - idea2app
         restart: always
-    rest-node-ts:
+    Open-Library-service:
         depends_on:
             - postgres
-        image: idea2app/rest-node-ts
+        image: Open-Source-Bazaar/Open-Library-service
         environment:
             - NODE_ENV=production
             - DATABASE_URL=postgres://postgres:${APP_SECRET}@postgres:5432/postgres
@@ -40,7 +40,7 @@ services:
         restart: always
     caddy:
         depends_on:
-            - rest-node-ts
+            - Open-Library-service
         image: caddy
         ports:
             - 80:80
@@ -48,4 +48,4 @@ services:
         networks:
             - idea2app
         restart: always
-        command: caddy reverse-proxy --from example.com --to rest-node-ts:8080
+        command: caddy reverse-proxy --from example.com --to Open-Library-service:8080
