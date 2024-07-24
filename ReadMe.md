@@ -57,7 +57,7 @@ npm login --scope=@your-org --registry=https://npm.pkg.github.com
 ```shell
 npm i pnpm -g
 
-pnpm i @Open-Source-Bazaar/Open-Library-service -D
+pnpm i @open-source-bazaar/open-library-service -D
 ```
 
 ## Environment variables

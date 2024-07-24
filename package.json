@@ -1,5 +1,5 @@
 {
-    "name": "@Open-Source-Bazaar/Open-Library-service",
+    "name": "@open-source-bazaar/open-library-service",
     "version": "0.7.0",
     "license": "LGPL-3.0",
     "author": "shiy2008@gmail.com",
@@ -79,7 +79,7 @@
         "migration:run": "npm run typeorm -- migration:run",
         "upgrade:dev": "npm run migration:generate -- migration/version  &&  npm run migration:run",
         "upgrade:pro": "cross-env NODE_ENV=production  npm run migration:generate -- .data/version  &&  npm run migration:run",
-        "pack-image": "docker build -t Open-Source-Bazaar/Open-Library-service:latest .",
-        "container": "docker rm -f Open-Library-service  &&  docker run --name Open-Library-service -p 8080:8080 -d Open-Source-Bazaar/Open-Library-service:latest"
+        "pack-image": "docker build -t open-source-bazaar/open-library-service:latest .",
+        "container": "docker rm -f open-library-service  &&  docker run --name open-library-service -p 8080:8080 -d open-source-bazaar/open-library-service:latest"
     }
 }
