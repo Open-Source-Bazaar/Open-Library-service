@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, ValidateNested } from 'class-validator';
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 import { Base } from './Base';
 import { Book } from './Book';
@@ -32,5 +32,16 @@ export class BookLog extends Base {
     @Type(() => BookLog)
     @IsOptional()
     @OneToOne(() => BookLog, { nullable: true })
+    @JoinColumn()
     relatedLog?: BookLog;
+
+    @IsString()
+    @IsOptional()
+    @Column({ nullable: true })
+    address?: string;
+
+    @IsString()
+    @IsOptional()
+    @Column({ nullable: true })
+    shipmentNumber?: string;
 }

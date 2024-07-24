@@ -9,13 +9,25 @@ import {
     QueryParams
 } from 'routing-controllers';
 import { ResponseSchema } from 'routing-controllers-openapi';
+import { Like } from 'typeorm';
 
-import { BaseFilter, Book, BookMap, BooklistChunk, dataSource } from '../model';
+import {
+    BaseFilter,
+    Book,
+    BookLog,
+    BookMap,
+    BooklistChunk,
+    ResolvedBookMap,
+    User,
+    dataSource
+} from '../model';
 
 @JsonController('/book')
 export class BookController {
     store = dataSource.getRepository(Book);
+    logStore = dataSource.getRepository(BookLog);
     mapStore = dataSource.getRepository(BookMap);
+    userStore = dataSource.getRepository(User);
 
     @Post()
     @ResponseSchema(Book)
@@ -31,13 +43,20 @@ export class BookController {
     }
 
     @Get('/:id/map')
-    @ResponseSchema(BookMap)
-    getOneMap(@Param('id') id: number) {
-        return this.mapStore
-            .createQueryBuilder()
-            .select('bookId, userId, count')
-            .where('bookId = :id', { id })
-            .getMany();
+    @ResponseSchema(ResolvedBookMap, { isArray: true })
+    async getOneMap(@Param('id') bookId: number) {
+        const list = await this.mapStore.find({ where: { bookId } });
+
+        return Promise.all(
+            list.map(async ({ bookId, userId, ...rest }) => ({
+                ...rest,
+                bookLogs: await this.logStore.find({
+                    where: { book: { id: bookId }, creator: { id: userId } },
+                    relations: ['relatedLog']
+                }),
+                user: await this.userStore.findOne({ where: { id: userId } })
+            }))
+        );
     }
 
     @Patch('/:id')
@@ -55,12 +74,15 @@ export class BookController {
         @QueryParams() { pageIndex, pageSize, keywords }: BaseFilter
     ) {
         const [list, count] = await this.store.findAndCount({
-            where: {
-                title: keywords,
-                description: keywords,
-                isbn: keywords,
-                publisher: keywords
-            },
+            where: keywords
+                ? [
+                      { title: Like(`%${keywords}%`) },
+                      { description: Like(`%${keywords}%`) },
+                      { authors: Like(`%${keywords}%`) },
+                      { isbn: Like(`%${keywords}%`) },
+                      { publisher: Like(`%${keywords}%`) }
+                  ]
+                : undefined,
             skip: (pageIndex - 1) * pageSize,
             take: pageSize
         });

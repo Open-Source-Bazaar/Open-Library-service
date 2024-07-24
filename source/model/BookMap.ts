@@ -1,8 +1,8 @@
 import { Type } from 'class-transformer';
-import { IsInt, ValidateNested } from 'class-validator';
-import { ManyToOne, ViewColumn, ViewEntity } from 'typeorm';
+import { IsInt, Min, ValidateNested } from 'class-validator';
+import { ViewColumn, ViewEntity } from 'typeorm';
 
-import { Book } from './Book';
+import { BookLog } from './BookLog';
 import { User } from './User';
 
 @ViewEntity({
@@ -16,19 +16,31 @@ import { User } from './User';
             .groupBy('bl.book.id, bl.creator.id')
 })
 export class BookMap {
-    @Type(() => Book)
-    @ValidateNested()
+    @IsInt()
+    @Min(1)
     @ViewColumn()
-    @ManyToOne(() => Book)
-    book: Book;
+    bookId: number;
+
+    @IsInt()
+    @Min(1)
+    @ViewColumn()
+    userId: number;
+
+    @IsInt()
+    @ViewColumn()
+    count: number;
+}
+
+export class ResolvedBookMap {
+    @Type(() => BookLog)
+    @ValidateNested({ each: true })
+    bookLogs: BookLog[];
 
     @Type(() => User)
     @ValidateNested()
-    @ViewColumn()
-    @ManyToOne(() => User)
     user: User;
 
-    @ViewColumn()
     @IsInt()
+    @ViewColumn()
     count: number;
 }
