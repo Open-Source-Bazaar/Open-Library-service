@@ -9,7 +9,7 @@ import { User } from './User';
     expression: connection =>
         connection
             .createQueryBuilder()
-            .from('BookLog', 'bl')
+            .from(BookLog, 'bl')
             .select('bl.book.id', 'bookId')
             .addSelect('bl.creator.id', 'userId')
             .addSelect('SUM(bl.count)', 'count')
