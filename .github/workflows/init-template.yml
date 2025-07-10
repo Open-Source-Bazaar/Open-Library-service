@@ -18,11 +18,13 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - if: github.repository != format('{0}/{1}', env.TEMPLATE_OWNER, env.TEMPLATE_NAME)
+            - name: transform Repository variables to lower case
               run: |
                   echo "REPOSITORY_OWNER=${REPOSITORY_OWNER@L}" >> "${GITHUB_ENV}"
                   echo "REPOSITORY_NAME=${REPOSITORY_NAME@L}" >> "${GITHUB_ENV}"
 
+            - if: github.repository != format('{0}/{1}', env.TEMPLATE_OWNER, env.TEMPLATE_NAME)
+              run: |
                   sh .github/workflows/replace-repository-name.sh \
                     ${{ env.TEMPLATE_OWNER }} ${{ env.TEMPLATE_NAME }} \
                     ${{ env.REPOSITORY_OWNER }} ${{ env.REPOSITORY_NAME }}

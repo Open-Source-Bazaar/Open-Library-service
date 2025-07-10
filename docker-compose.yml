@@ -3,7 +3,7 @@ version: '3'
 volumes:
     database-data:
 networks:
-    idea2app:
+    open-source-bazaar:
 
 services:
     postgres:
@@ -13,7 +13,7 @@ services:
         volumes:
             - database-data:/var/lib/postgresql/data/
         networks:
-            - idea2app
+            - open-source-bazaar
         restart: always
     open-library-service:
         depends_on:
@@ -24,9 +24,28 @@ services:
             - DATABASE_URL=postgres://postgres:${APP_SECRET}@postgres:5432/postgres
             - PORT=8080
         networks:
-            - idea2app
+            - open-source-bazaar
         healthcheck:
             test: ['CMD-SHELL', 'curl -f http://localhost:8080/ || exit 1']
+            interval: 3s
+            retries: 5
+            start_period: 30s
+        labels:
+            - autoheal=true
+        restart: always
+    dashpress:
+        depends_on:
+            - postgres
+            - rest-node-ts
+        image: luojiyin/dashpress:1.0
+        volumes:
+            - ./dashpress/app:/app
+        ports:
+            - 8081:3000
+        networks:
+            - open-source-bazaar
+        healthcheck:
+            test: ['CMD-SHELL', 'curl -f http://localhost:3000/ || exit 1']
             interval: 3s
             retries: 5
             start_period: 30s
@@ -37,6 +56,8 @@ services:
         image: willfarrell/autoheal:1.2.0
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - open-source-bazaar
         restart: always
     caddy:
         depends_on:
@@ -46,6 +67,7 @@ services:
             - 80:80
             - 443:443
         networks:
-            - idea2app
+            - open-source-bazaar
         restart: always
-        command: caddy reverse-proxy --from example.com --to open-library-service:8080
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile  
