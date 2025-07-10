@@ -59,6 +59,7 @@ jobs:
 
             - name: Run Image
               uses: appleboy/ssh-action@v1
+              if: ${{ env.HOST }}
               with:
                   host: ${{ secrets.HOST }}
                   username: ${{ secrets.USER }}
