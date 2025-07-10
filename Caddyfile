@@ -1,5 +1,5 @@
 example.com {
-    reverse_proxy rest-node-ts:8080
+    reverse_proxy open-library-service:8080
 }
 
 dashpress.example.com {

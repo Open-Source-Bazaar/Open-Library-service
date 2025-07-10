@@ -36,7 +36,7 @@ services:
     dashpress:
         depends_on:
             - postgres
-            - rest-node-ts
+            - open-library-service
         image: luojiyin/dashpress:1.0
         volumes:
             - ./dashpress/app:/app

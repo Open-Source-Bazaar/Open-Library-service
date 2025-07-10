@@ -146,7 +146,7 @@ git push origin master --tags
 [15]: https://github.com/apps/settings
 [16]: https://pullrequestbadge.com/
 [17]: https://code.visualstudio.com/
-[18]: https://github.com/new?template_name=Open-Library-service&template_owner=idea2app
+[18]: https://github.com/new?template_name=Open-Library-service&template_owner=open-source-bazaar
 [19]: https://github.com/kaiyuanshe/kaiyuanshe.github.io/blob/bb4675a56bf1d6b207231313da5ed0af7cf0ebd6/.github/workflows/pull-request.yml#L32-L56
 [20]: https://github.com/Open-Source-Bazaar/Open-Library-service/issues/new/choose
 [21]: https://github.com/Open-Source-Bazaar/Open-Library-service/projects
