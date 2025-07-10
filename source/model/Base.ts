@@ -9,9 +9,11 @@ import {
 import { NewData } from 'mobx-restful';
 import {
     CreateDateColumn,
+    DeleteDateColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
+import { isEmpty } from 'web-utility';
 
 export type InputData<T> = NewData<Omit<T, keyof Base>, Base>;
 
@@ -33,12 +35,21 @@ export class BaseFilter {
     keywords?: string;
 }
 
-export interface ListChunk<T extends Base> {
+export interface ListChunk<T> {
     count: number;
     list: T[];
 }
 
 export abstract class Base {
+    static from<T>(idOrData: T): T extends object ? T : Base {
+        if (isEmpty(idOrData)) return;
+
+        const id = +idOrData,
+            instance = Reflect.construct(this, []);
+
+        return Object.assign(instance, isNaN(id) ? idOrData : { id });
+    }
+
     @IsInt()
     @IsOptional()
     @PrimaryGeneratedColumn()
@@ -53,4 +64,9 @@ export abstract class Base {
     @IsOptional()
     @UpdateDateColumn()
     updatedAt: string;
+
+    @IsDateString()
+    @IsOptional()
+    @DeleteDateColumn({ select: false })
+    deletedAt?: string;
 }

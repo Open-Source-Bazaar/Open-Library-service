@@ -1,7 +1,10 @@
 node_modules/
 package-lock.json
+yarn.lock
+test/client.ts
 dist/
 type/*.d.ts
-.env
+.env*
+!.env.example
 .data/
 .vscode/settings.json

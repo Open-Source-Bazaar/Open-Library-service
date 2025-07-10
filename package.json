@@ -1,6 +1,6 @@
 {
     "name": "@open-source-bazaar/open-library-service",
-    "version": "0.7.0",
+    "version": "1.0.0",
     "license": "LGPL-3.0",
     "author": "shiy2008@gmail.com",
     "description": "RESTful API service scaffold based on Node.js & TypeScript",

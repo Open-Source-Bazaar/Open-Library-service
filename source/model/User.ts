@@ -78,7 +78,9 @@ export class SignUpData
 }
 
 export interface JWTAction {
-    context?: ParameterizedContext<JsonWebTokenError | { user: User }>;
+    context?: ParameterizedContext<
+        { jwtOriginalError: JsonWebTokenError } | { user: User }
+    >;
 }
 
 @Entity()
@@ -89,7 +91,7 @@ export class User extends Base {
 
     @IsEnum(Gender)
     @IsOptional()
-    @Column({ enum: Gender, nullable: true })
+    @Column({ type: 'simple-enum', enum: Gender, nullable: true })
     gender?: Gender;
 
     @IsUrl()
@@ -125,6 +127,7 @@ export class User extends Base {
 export abstract class UserBase extends Base {
     @Type(() => User)
     @ValidateNested()
+    @IsOptional()
     @ManyToOne(() => User)
     createdBy: User;
 
@@ -133,4 +136,25 @@ export abstract class UserBase extends Base {
     @IsOptional()
     @ManyToOne(() => User)
     updatedBy?: User;
+
+    @Type(() => User)
+    @ValidateNested()
+    @IsOptional()
+    @ManyToOne(() => User)
+    deletedBy?: User;
+}
+
+export class UserBaseFilter
+    extends BaseFilter
+    implements Partial<InputData<UserBase>>
+{
+    @IsInt()
+    @Min(1)
+    @IsOptional()
+    createdBy?: number;
+
+    @IsInt()
+    @Min(1)
+    @IsOptional()
+    updatedBy?: number;
 }
